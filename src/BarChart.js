@@ -13,6 +13,7 @@ import {
 import { dummyData } from "./data/data";
 import ChartDetails from "./ChartDetails";
 import { GiClick } from 'react-icons/gi';
+import { BsRecordCircleFill } from "react-icons/bs";
 
 
 export default function BarChartScreen() {
@@ -73,6 +74,22 @@ export default function BarChartScreen() {
         setTotalNegative(d[0].negative)
         setTotalNeutral(d[0].neutral)
     }
+    const renderColorfulLegendText = (value, entry) => {
+        console.log(entry)
+        let color;
+        const { dataKey } = entry;
+        if (dataKey === "neutral"){
+            color = "#8884d8"
+        }
+        else if (dataKey === "negative"){
+            color = "#82ca9d"
+        }
+        else{
+            color = "#ffc658"
+        }
+      
+        return <span style={{ color }}> <BsRecordCircleFill style={{fontSize:9}}/>  {value}</span>;
+      };
 
   return (
     <div className="container">
@@ -93,7 +110,7 @@ export default function BarChartScreen() {
             <XAxis dataKey="date" />
             <YAxis />
             <Tooltip />
-            <Legend />
+            <Legend formatter={renderColorfulLegendText} iconSize={0}/>
             <Bar dataKey="positive" onClick={handleClick}>
             {barData.map((entry, index) => (
                 <Cell
