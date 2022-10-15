@@ -4,7 +4,7 @@
 
 Given a sample data `src/data/data.js`,
 
-1. rechartJS was use to create a rechart table for bar chart
+1. [rechartJS](https://recharts.org/) was use to create a rechart table for bar chart
 2. part of the data was processed to provide the output in the table.
 
 ## URL
