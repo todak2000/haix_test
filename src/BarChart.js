@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react";
 import {
   BarChart,
   Bar,
+  Cell,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -11,77 +12,41 @@ import {
 } from "recharts";
 import { dummyData } from "./data/data";
 import ChartDetails from "./ChartDetails";
+import { GiClick } from 'react-icons/gi';
 
-// const data = [
-//   {
-//     name: "Page A",
-//     uv: 4000,
-//     pv: 2400,
-//     amt: 2400
-//   },
-//   {
-//     name: "Page B",
-//     uv: 3000,
-//     pv: 1398,
-//     amt: 2210
-//   },
-//   {
-//     name: "Page C",
-//     uv: 2000,
-//     pv: 9800,
-//     amt: 2290
-//   },
-//   {
-//     name: "Page D",
-//     uv: 2780,
-//     pv: 3908,
-//     amt: 2000
-//   },
-//   {
-//     name: "Page E",
-//     uv: 1890,
-//     pv: 4800,
-//     amt: 2181
-//   },
-//   {
-//     name: "Page F",
-//     uv: 2390,
-//     pv: 3800,
-//     amt: 2500
-//   },
-//   {
-//     name: "Page G",
-//     uv: 3490,
-//     pv: 4300,
-//     amt: 2100
-//   }
-// ];
 
 export default function BarChartScreen() {
     const [barData, setBarData] = useState([])
     const [convoData, setConvoData] = useState([])
+    const [activeConvo, setActiveConvo] = useState([]);
+    const [totalPositive, setTotalPositive] = useState(0);
+    const [totalNegative, setTotalNegative] = useState(0);
+    const [totalNeutral, setTotalNeutral] = useState(0);
     const getData = ()=>{
         let dataArr = []
         let convoArr = []
         let stat = dummyData.stats.twitter.timelineStats.timeline
         
-        Object.values(stat).map((item)=>
+        Object.values(stat).map((item, index)=>
         {
             let convo = item.allTweets
-            // console.log(convo)
             Object.values(convo).map((x) =>{
                 let z = {
+                    index: index,
                     date: x.date.substring(0,10),
                     time: x.date.substring(11,19),
                     dateWords: x.created,
                     comment: x.tweet,
                     sentimentPolarityLabel: x.sentimentPolarityLabel,
+                    positive: item.sentimentAsCategories.positiveTweets,
+                    negative: item.sentimentAsCategories.negativeTweets,
+                    neutral: item.sentimentAsCategories.neutralTweets
                 }
                 convoArr.push(z)
                 return convoArr
-                // console.log(z)
             })
             let y = {
+                index: index,
                 date: item.currentTimeStamp.substring(0,10),
                 positive: item.sentimentAsCategories.positiveTweets,
                 negative: item.sentimentAsCategories.negativeTweets,
@@ -89,17 +54,26 @@ export default function BarChartScreen() {
             }
 
             dataArr.push(y)
+            
             return dataArr
         })
         setBarData(dataArr)
         setConvoData(convoArr)
         
     }
-    // console.log(barData[0].date)
-    console.log(convoData)
     useEffect(()=>{
         getData()
     }, [])
+   
+
+    const handleClick =(entry)=>{
+        let d = convoData.filter(item => item.index === entry.index)
+        setActiveConvo(d)
+        setTotalPositive(d[0].positive)
+        setTotalNegative(d[0].negative)
+        setTotalNeutral(d[0].neutral)
+    }
+
   return (
     <div className="container">
         <BarChart
@@ -120,13 +94,72 @@ export default function BarChartScreen() {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Bar dataKey="positive" fill="#8884d8"  onClick={()=>{console.log("hi")}}/>
-            <Bar dataKey="negative"  fill="#82ca9d"  />
-            <Bar dataKey="neutral" fill="#ffc658"  />
+            <Bar dataKey="positive" onClick={handleClick}>
+            {barData.map((entry, index) => (
+                <Cell
+                cursor="pointer"
+                fill="#ffc658" 
+                key={`cell-${index}`}
+                />
+            ))}
+            </Bar>
+            <Bar dataKey="negative" onClick={handleClick}>
+            {barData.map((entry, index) => (
+                <Cell
+                cursor="pointer"
+                fill="#82ca9d"
+                key={`cell-${index}`}
+                />
+            ))}
+            </Bar>
+            <Bar dataKey="neutral" onClick={handleClick}>
+            {barData.map((entry, index) => (
+                <Cell
+                cursor="pointer"
+                fill="#8884d8"
+                key={`cell-${index}`}
+                />
+            ))}
+            </Bar>
         </BarChart>
+
         <div className="chart-container">
-            <ChartDetails />
-            {/* <ChartDetails /> */}
+          <div className="chart-container-inner">
+            
+            {activeConvo.length > 0 ? 
+            <>
+                <section className='top-label'>
+                    <p>Comments</p>
+                    <div className='flex-row'>
+                        <p>Positive: {totalPositive}</p>
+                        <p>Negative: {totalNegative}</p>
+                        <p>Neutral: {totalNeutral}</p>
+                    </div>
+                </section>
+                <section className="table-section">
+                    <table className='table'>
+                        <thead>
+                        <tr>
+                            <th className='comment-th'>Comment</th>
+                            <th>Date & Time</th>
+                            <th>Sentiment</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {activeConvo.map((item, index)=>{
+                            return <ChartDetails key={index} comment={item.comment} sentimentPolarityLabel={item.sentimentPolarityLabel} dateWords={item.dateWords} time={item.time} date={item.comment} /> 
+                        })}
+                    </tbody>
+                    </table>
+                </section>
+            </>
+            :
+            <div className="container">
+                <GiClick className="icon"/>
+                <p>Click on the tabs in the chart to see details/comments</p>
+            </div>
+            }
+          </div>
         </div>
         
     </div>

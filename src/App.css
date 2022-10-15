@@ -5,15 +5,35 @@
   align-items: center;
 }
 .chart-container{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
   width:90%;
   height:30vh;
 }
 .comment-th{
   width:60%;
+}
+.icon-td{
+  text-align: center;
+}
+.table-section{
+  height:250px;
+  overflow: auto;
+}
+.icon{
+  font-size: 70px;
+  margin-top:3rem;
+  color: #ff6961;
+}
+.icon-positive{
+  font-size: 30px;
+  color: #50C878;
+}
+.icon-negative{
+  font-size: 30px;
+  color: #ff6961;
+}
+.icon-neutral{
+  font-size: 30px;
+  color: #f0e130;
 }
 .chart-container-inner{
   height:25vh;
@@ -22,18 +42,19 @@
 .table{
   width: 100%;
 }
-.table > tr > th{
+.table > thead > tr > th{
   font-weight: 500;
   line-height: 3rem;
-  border-top: 1px solid #ccc;
+  border-top: 1px solid #F1E8FD;
 }
-.table >tr {
+.table > tbody> tr {
   text-align: left;
 }
-.table > tr > td{
+.table > tbody > tr > td{
   font-weight: 200;
   font-size: 0.9rem;
-  background-color: #ccc;
+  background-color: #FAF9FD;
+  border-top: 1px solid #F1E8FD;
   padding:0.5rem;
 }
 .top-label{
