@@ -2,6 +2,7 @@ import './App.css';
 import { SlEmotsmile } from "react-icons/sl";
 import { BsEmojiAngry } from "react-icons/bs";
 import { GiClick } from 'react-icons/gi';
+
 function ChartDetails(props) {
   const {totalPositive,totalNegative, totalNeutral, activeConvo} = props
   return (
@@ -27,7 +28,6 @@ function ChartDetails(props) {
                         </thead>
                         <tbody>
                         {activeConvo.map((item, index)=>{
-                            // return <ChartDetails key={index} comment={item.comment} sentimentPolarityLabel={item.sentimentPolarityLabel} dateWords={item.dateWords} time={item.time} date={item.comment} /> 
                             const {comment, dateWords, time, sentimentPolarityLabel, date} = item;
                             return (
                               <tr key={index}>

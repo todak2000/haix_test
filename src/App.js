@@ -1,6 +1,6 @@
 import "./App.css";
 import React, {useEffect, useState} from "react";
-import { dummyData } from "./data/data";
+import { dummyData } from "./data/twitter_data";
 import { dummyInstaData } from "./data/insta_data";
 import ChartDetails from "./ChartDetails";
 import NavBar from "./NavBar";
@@ -26,7 +26,6 @@ export default function App() {
         }
         else if (sm === "instagram"){
             stat = dummyInstaData.stats.instagram.timelineStats.timeline
-            // 
         }
         let convo
         Object.values(stat).map((item, index)=>
@@ -36,7 +35,6 @@ export default function App() {
             }
             else if (sm === "instagram"){
                 convo = item?.comments
-                // console.log(convo, "convo")
             }
 
             Object.values(convo).map((x) =>{
@@ -84,7 +82,6 @@ export default function App() {
     }
 
     const handleClick =(entry)=>{
-        // console.log(entry.payload.z, "entry")
         let d
         if(entry.payload.z !== undefined){
             d = convoData.filter(item => item?.index === (entry?.payload?.z)) 
@@ -99,7 +96,6 @@ export default function App() {
         setTotalNeutral(d[0]?.neutral)
     }
     const renderColorfulLegendText = (value, entry) => {
-        // console.log(entry)
         let color;
         const { dataKey } = entry;
         if (dataKey === "neutral"){
@@ -114,7 +110,7 @@ export default function App() {
       
         return <span style={{ color }}> <BsRecordCircleFill style={{fontSize:9}}/>  {value}</span>;
       };
-    //   console.log(convoData, "convo") 
+
   return (
 
     <>
